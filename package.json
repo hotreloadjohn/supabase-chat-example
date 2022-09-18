@@ -1,0 +1,34 @@
+{
+  "name": "supabase-chat-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.1",
+    "@supabase/auth-helpers-nextjs": "^0.2.8",
+    "@supabase/auth-helpers-react": "^0.2.4",
+    "@supabase/supabase-js": "^1.35.6",
+    "emoji-picker-react": "^3.6.2",
+    "next": "12.3.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.4.0",
+    "react-scroll": "^1.8.7",
+    "swiper": "^8.4.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "autoprefixer": "^10.4.11",
+    "eslint": "8.23.1",
+    "eslint-config-next": "12.3.0",
+    "postcss": "^8.4.16",
+    "tailwind-scrollbar": "^2.0.1",
+    "tailwindcss": "^3.1.8"
+  }
+}
