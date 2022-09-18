@@ -140,8 +140,8 @@ const Message = (props) => {
             <p className="text-[#495057] dark:text-[#a6b0cf] transition-colors duration-[350ms] select-none text-sm leading-5 font-medium tablet:mx-2 tablet:text-xs">
               {/* {message.sender === user.uid ? user.username : chatUser.username} */}
               {message.profile.id !== user.id
-                ? user.username
-                : chatUser.username}
+                ? user.user_metadata.username
+                : message.profile.username}
             </p>
           )}
         </div>
