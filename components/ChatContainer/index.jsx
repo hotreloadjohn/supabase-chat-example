@@ -8,7 +8,6 @@ import Message from "./Message";
 const ChatContainer = () => {
   const [thisMessages, setThisMessages] = useState([]);
   const { state, dispatch } = useChat();
-  let selectedRoomId = state.selectedRoomId?.id;
 
   const [search, setSearch] = useState("");
 
@@ -24,7 +23,7 @@ const ChatContainer = () => {
       const { data } = await supabaseClient
         .from("messages")
         .select("*, profile: profiles(id, username)")
-        .match({ room_id: selectedRoomId })
+        .match({ room_id: state.selectedRoomId?.id })
         .order("created_at");
 
       if (!data) {
@@ -48,7 +47,35 @@ const ChatContainer = () => {
     };
 
     getData();
-  }, [selectedRoomId]);
+  }, [state.selectedRoomId?.id]);
+
+  const getUserProfile = async (incomingMessage) => {
+    const { data } = await supabaseClient
+      .from("messages")
+      .select("*, profile: profiles(id, username)")
+      .match({ room_id: incomingMessage.room_id })
+      .order("created_at");
+
+    if (data) {
+      setThisMessages(data);
+    }
+  };
+
+  useEffect(() => {
+    const subscription = supabaseClient
+      .from(`messages:room_id=eq.${state.selectedRoomId?.id}`)
+      .on("INSERT", (payload) => {
+        // TODO: add new user to cache if their profile doesn't exist
+        // setThisMessages((current) => [...current, payload.new]);
+        console.log(payload);
+        getUserProfile(payload.new);
+      })
+      .subscribe();
+
+    return () => {
+      supabaseClient.removeSubscription(subscription);
+    };
+  }, [state.selectedRoomId?.id]);
 
   const searchMessage = (value) => {
     setSearch(value);
@@ -58,10 +85,9 @@ const ChatContainer = () => {
     if (!value) {
       return false;
     }
-    console.log(value);
     const { error } = await supabaseClient
       .from("messages")
-      .insert({ content: value, room_id: selectedRoomId });
+      .insert({ content: value, room_id: state.selectedRoomId?.id });
 
     if (error) {
       alert(error.message);
