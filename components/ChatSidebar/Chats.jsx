@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import User from "./User";
+import { useChat } from "../../context/ChatContext";
 
 const Chats = () => {
   const [search, setSearch] = useState("");
   const [recentUsers, setRecentUsers] = useState([]);
+  const { state, dispatch } = useChat();
   // !recent messages list
   const allUsers = true;
 
+  // Get all rooms from supabase
   useEffect(() => {
     const getRooms = async () => {
       const { data } = await supabaseClient
@@ -23,6 +26,61 @@ const Chats = () => {
 
     getRooms();
   }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await supabaseClient
+        .from("messages")
+        .select("*, profile: profiles(id, username)")
+        .match({ room_id: state.selectedRoomId?.id })
+        .order("created_at");
+
+      if (!data) {
+        // alert("no data");
+        return;
+      }
+
+      dispatch({ type: "UPDATE_MESSAGES", payload: data });
+    };
+
+    getData();
+  }, [state.selectedRoomId?.id, dispatch]);
+
+  const getUserProfile = async (incomingMessage) => {
+    const { data } = await supabaseClient
+      .from("messages")
+      .select("*, profile: profiles(id, username)")
+      .match({ room_id: incomingMessage.room_id })
+      .order("created_at");
+
+    if (data) {
+      dispatch({ type: "UPDATE_MESSAGES", payload: data });
+    }
+  };
+
+  // Mount database listener
+  useEffect(() => {
+    if (state.selectedRoomId?.id === undefined) return;
+    console.log(
+      `Mounting subscription listener for ${state.selectedRoomId?.id}`
+    );
+    const subscription = supabaseClient
+      .from(`messages:room_id=eq.${state.selectedRoomId?.id}`)
+      .on("INSERT", (payload) => {
+        // TODO: add new user to cache if their profile doesn't exist
+        // setThisMessages((current) => [...current, payload.new]);
+        console.log(payload.new);
+        getUserProfile(payload.new);
+      })
+      .subscribe();
+
+    return () => {
+      console.log(
+        `dismounting subscription listener for ${state.selectedRoomId?.id}`
+      );
+      supabaseClient.removeSubscription(subscription);
+    };
+  }, [state.selectedRoomId?.id]);
 
   return (
     <div className="h-full">

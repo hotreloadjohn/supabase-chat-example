@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 
 const intialChatState = {
   selectedRoomId: null,
+  chatMessages: [],
 };
 
 export const ChatContext = createContext();
@@ -16,6 +17,12 @@ const chatReducer = (state, action) => {
       return {
         ...state,
         selectedRoomId: action.payload,
+      };
+
+    case "UPDATE_MESSAGES":
+      return {
+        ...state,
+        chatMessages: action.payload,
       };
   }
 };

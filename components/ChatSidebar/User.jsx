@@ -1,8 +1,9 @@
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useEffect } from "react";
 import { useChat } from "../../context/ChatContext";
 
 const User = ({ room }) => {
   const { state, dispatch } = useChat();
-  const selectedRoomId = state.selectedRoomId?.id;
   // dispatch({ type: "UPDATE_SID", payload: convo.sid });
 
   const cUser = {
@@ -28,6 +29,7 @@ const User = ({ room }) => {
     console.log(`Selected room ${room.id}`);
     dispatch({ type: "UPDATE_SELECTED_ROOM", payload: room });
   };
+
   // !message seen
   //    useEffect(() => {
   //       if (show && !cUser.seen && connectionId && cUser.sender === cUser.uid) {
@@ -40,7 +42,7 @@ const User = ({ room }) => {
       onClick={handleClick}
       className={`cursor-pointer h-[74px] overflow-hidden whitespace-normal text-ellipsis rounded-1 text-[15px] text-[#7a7f9a] leading-[22.5px] py-4 px-5 mb-0.5 flex justify-between gap-3 transition-colors duration-300 hover:bg-[#e6ebf5] dark:hover:bg-[#36404a] tablet:hover:bg-inherit tablet:dark:hover:bg-inherit ${
         window.innerWidth > 991 &&
-        selectedRoomId === room.id &&
+        state.selectedRoomId?.id === room.id &&
         "bg-[#e6ebf5] dark:bg-[#36404a]"
       } `}
     >

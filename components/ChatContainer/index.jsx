@@ -18,64 +18,7 @@ const ChatContainer = () => {
   const show = true;
   const reply = false;
 
-  useEffect(() => {
-    const getData = async () => {
-      const { data } = await supabaseClient
-        .from("messages")
-        .select("*, profile: profiles(id, username)")
-        .match({ room_id: state.selectedRoomId?.id })
-        .order("created_at");
-
-      if (!data) {
-        // alert("no data");
-        return;
-      }
-
-      // const newProfiles = Object.fromEntries(
-      //   data
-      //     .map((message) => message.profile)
-      //     .filter(Boolean) // is truthy
-      //     .map((profile) => [profile!.id, profile!])
-      // )
-
-      // setProfileCache((current) => ({
-      //   ...current,
-      //   ...newProfiles,
-      // }))
-      console.log(data);
-      setThisMessages(data);
-    };
-
-    getData();
-  }, [state.selectedRoomId?.id]);
-
-  const getUserProfile = async (incomingMessage) => {
-    const { data } = await supabaseClient
-      .from("messages")
-      .select("*, profile: profiles(id, username)")
-      .match({ room_id: incomingMessage.room_id })
-      .order("created_at");
-
-    if (data) {
-      setThisMessages(data);
-    }
-  };
-
-  useEffect(() => {
-    const subscription = supabaseClient
-      .from(`messages:room_id=eq.${state.selectedRoomId?.id}`)
-      .on("INSERT", (payload) => {
-        // TODO: add new user to cache if their profile doesn't exist
-        // setThisMessages((current) => [...current, payload.new]);
-        console.log(payload);
-        getUserProfile(payload.new);
-      })
-      .subscribe();
-
-    return () => {
-      supabaseClient.removeSubscription(subscription);
-    };
-  }, [state.selectedRoomId?.id]);
+  console.log(`chat container: ${JSON.stringify(state.chatMessages[0])}`);
 
   const searchMessage = (value) => {
     setSearch(value);
@@ -103,8 +46,8 @@ const ChatContainer = () => {
           {/* messages container */}
           <div className=" max-h-80	flex flex-col p-6 pb-1 overflow-x-hidden overflow-y-auto scrollbar-border scrollbar-current scrollbar-thumb-transparent">
             {/* message */}
-            {thisMessages &&
-              thisMessages
+            {state.chatMessages &&
+              state.chatMessages
                 .filter(
                   (msg) =>
                     !msg.content.toLowerCase().indexOf(search.toLowerCase()) ||
@@ -115,7 +58,7 @@ const ChatContainer = () => {
                     key={i}
                     message={message}
                     i={i}
-                    thisMessages={thisMessages}
+                    thisMessages={state.chatMessages}
                   />
                 ))}
           </div>
