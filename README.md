@@ -26,6 +26,7 @@ end;
 
 ```
 on_room_created(trigger)
+
 insert_creator_into_room trigger
 
 begin
@@ -37,7 +38,7 @@ end
 
 ---
 
-is_room_participant
+is_room_participant -> bool
 
 select exists (
   select 1
@@ -55,8 +56,7 @@ check (
 --
 select is_room_participant('f74166eb-0abc-4089-9729-534bdf1abf00', '7d01ea10-aebf-4271-b985-0d3f2bf9471b')
 --
-
-create or replace function create_room(name text default null)
+create or replace function create_room(name text default null, seller uuid default null)
 returns rooms as $$
   declare
     v_room rooms;
@@ -68,9 +68,13 @@ returns rooms as $$
     insert into room_participants(room_id, profile_id)
     values(v_room.id, auth.uid());
 
+    insert into room_participants(room_id, profile_id)
+    values(v_room.id, seller);
+
     return v_room;
   end;
 $$ language plpgsql security definer;
+
 ```
 
 https://medium.com/carousell-insider/assembling-robust-web-chat-applications-with-javascript-an-in-depth-guide-9f36685fc1bc
