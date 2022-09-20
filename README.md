@@ -89,7 +89,7 @@ and auth.role() = 'authenticated
 
 https://medium.com/carousell-insider/assembling-robust-web-chat-applications-with-javascript-an-in-depth-guide-9f36685fc1bc
 
-![1](https://icedrive.net/s/i6Y1xyCiaYBbB25B9iCPkQuPDai2)
+![1](https://icecube-eu-408.icedrive.io/download?p=LPiu…CFVHm9pfTzXqRRKmtc13tindiIT.nEoUxL.uowLrqi8sqlQ--)
 ![1](https://icedrive.net/s/uYtZZTjQwFQBWv7AFGShxiBF6Y3g)
 ![1](https://icedrive.net/s/4XSuuvXCVCazGtWNDAQZTzNF16Rz)
 ![1](https://icedrive.net/s/hzyZ8zTN7ZQ7bXWVVWhDZxQ8BagF)
