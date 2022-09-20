@@ -18,8 +18,6 @@ const ChatContainer = () => {
   const show = true;
   const reply = false;
 
-  console.log(`chat container: ${JSON.stringify(state.chatMessages[0])}`);
-
   const searchMessage = (value) => {
     setSearch(value);
   };
@@ -46,8 +44,8 @@ const ChatContainer = () => {
           {/* messages container */}
           <div className=" max-h-80	flex flex-col p-6 pb-1 overflow-x-hidden overflow-y-auto scrollbar-border scrollbar-current scrollbar-thumb-transparent">
             {/* message */}
-            {state.chatMessages &&
-              state.chatMessages
+            {state.conversations[state.selectedRoomId?.id] &&
+              state.conversations[state.selectedRoomId?.id]
                 .filter(
                   (msg) =>
                     !msg.content.toLowerCase().indexOf(search.toLowerCase()) ||
@@ -58,7 +56,7 @@ const ChatContainer = () => {
                     key={i}
                     message={message}
                     i={i}
-                    thisMessages={state.chatMessages}
+                    thisMessages={state.conversations[state.selectedRoomId.id]}
                   />
                 ))}
           </div>

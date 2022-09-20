@@ -68,13 +68,22 @@ const User = ({ room }) => {
           {cUser.sender === user.uid && (
             <span className="font-semibold">You:</span>
           )}
-          <p
-            className={`leading-5 h-6 overflow-hidden whitespace-normal text-ellipsis ${
-              !cUser.seen && cUser.sender !== user.uid && "font-semibold"
-            }`}
-          >
-            {room.name}
-          </p>
+          <div>
+            <p
+              className={`leading-5 h-6 overflow-hidden whitespace-normal text-ellipsis ${
+                !cUser.seen && cUser.sender !== user.uid && "font-semibold"
+              }`}
+            >
+              <b>{room.item_name}</b>
+            </p>
+            <p
+              className={`leading-5 h-6 overflow-hidden whitespace-normal text-ellipsis ${
+                !cUser.seen && cUser.sender !== user.uid && "font-semibold"
+              }`}
+            >
+              {room.seller_name}
+            </p>
+          </div>
         </div>
       </div>
       <div className="text-[11px] leading-4 h-full flex flex-col  justify-start items-center gap-0.5 w-10">
