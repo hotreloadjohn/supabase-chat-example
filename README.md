@@ -89,15 +89,6 @@ and auth.role() = 'authenticated
 
 https://medium.com/carousell-insider/assembling-robust-web-chat-applications-with-javascript-an-in-depth-guide-9f36685fc1bc
 
-![1](https://icecube-eu-408.icedrive.io/thumbnail?p=i5e7Jxh53Fy07OZzJmTgKFi4.X_3IORSQp_wDxpjfPo1_6EI7sfN71at0Xn4XvFF1Os2xlDqB3J6XV7bO58BbCDlyLGz8uHpUKktTHrYuxAg7qmGFnpgIrOu.AMZaq5Z&w=1000&h=1000&m=middle)
-![1](https://icecube-eu-408.icedrive.io/thumbnail?p=pyVCDCgH_7y0S_u.ZRmk_nj2y7W6a7FGojRTHX.9b_0opEuQkhRiO36uc3KYmDAPoBoDUsVepq6d5N5rWnkEYSDlyLGz8uHpUKktTHrYuxAg7qmGFnpgIrOu.AMZaq5Z&w=1000&h=1000&m=middle)
-![1](https://icecube-eu-408.icedrive.io/thumbnail?p=07HJu0DjYbsJ.cDynce23sv.L2KeZCIG_Mu3mN0k3NtqgrfZ7lxwVFRn.3Q55c7MCibE.SX16Cnz1_rrlm.qV1FSScqz_RS7TiHgY442Wi1bNPi7XtZwaRkWzJxlLcPmegW.qA.wilbxVhrcSb7C9sA7Z5w1mIZpmVtu0w0Pc.Nj7N_bqlmpdPb1f6CZjSLf3dhnWEEf6V3Wxsx33qWudg--&w=1000&h=1000&m=middle)
-
-![1](https://icecube-eu-408.icedrive.io/thumbnail?p=07HJu0DjYbsJ.cDynce23sv.L2KeZCIG_Mu3mN0k3Nsr7x5LRD94566D73vJI4eyCibE.SX16Cnz1_rrlm.qV1FSScqz_RS7TiHgY442Wi0.DaYXAeMiCArIBrs3SOhuCLZMcbTK7Mw1IgwlEh0JW4GXPziPGqBQ9vbdbyr8vTUZO3sxXvNZ7LQSh_QmOTwA3dhnWEEf6V3Wxsx33qWudg--&w=1000&h=1000&m=middle)
-![1](https://icecube-eu-408.icedrive.io/thumbnail?p=07HJu0DjYbsJ.cDynce23sv.L2KeZCIG_Mu3mN0k3Nsr7x5LRD94566D73vJI4eyCibE.SX16Cnz1_rrlm.qV1FSScqz_RS7TiHgY442Wi0.DaYXAeMiCArIBrs3SOhuCLZMcbTK7Mw1IgwlEh0JW4GXPziPGqBQ9vbdbyr8vTUZO3sxXvNZ7LQSh_QmOTwA3dhnWEEf6V3Wxsx33qWudg--&w=1000&h=1000&m=middle)
-![1](https://icecube-eu-408.icedrive.io/thumbnail?p=07HJu0DjYbsJ.cDynce23sv.L2KeZCIG_Mu3mN0k3Nv3A3Tmahs2Js38_gZGJ1ToCibE.SX16Cnz1_rrlm.qV1FSScqz_RS7TiHgY442Wi3pvz6oxAlbjVYuLhn8FJ1UMze0W_6kHGbYWcxpyswHu9ORCd704v5Iq1wJDXdd4m8TkE_B3FwoKh3gG1iPBxYa3dhnWEEf6V3Wxsx33qWudg--&w=1000&h=1000&m=middle)
-![1](https://icecube-eu-408.icedrive.io/thumbnail?p=07HJu0DjYbsJ.cDynce23sv.L2KeZCIG_Mu3mN0k3NunSKSPJhIDogOy1GLsy1U7CibE.SX16Cnz1_rrlm.qV1FSScqz_RS7TiHgY442Wi3._NpDoMzFAm1bemtrGV_chNoLPiIaLb2KnVIw3w1sn07MIYf2c51yBelPGb5v6b1TWIpVcPFVwYblywentGKC3dhnWEEf6V3Wxsx33qWudg--&w=1000&h=1000&m=middle)
-
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
