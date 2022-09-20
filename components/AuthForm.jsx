@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import useForm from "../hooks/useForm";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
+import { useChat } from "../context/ChatContext";
 
 const AuthForm = ({ formType = "signup", closeModal }) => {
   const [loading, setLoading] = useState(false);
+
+  const { dispatch } = useChat();
 
   const { form, handleChange, resetForm } = useForm({
     name: "",
@@ -15,7 +18,6 @@ const AuthForm = ({ formType = "signup", closeModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(form);
     if (formType === "signup") {
       const { error: signUpError } = await supabaseClient.auth.signUp(
         {
@@ -37,13 +39,16 @@ const AuthForm = ({ formType = "signup", closeModal }) => {
     }
 
     if (formType === "login") {
-      const { error } = await supabaseClient.auth.signIn({
+      const { data, error } = await supabaseClient.auth.signIn({
         email: form.email,
         password: form.password,
       });
-      //   if (error) {
-      //     return showErrorToast(error.message, setLoading);
-      //   }
+      if (error) {
+        return toast(error.message);
+      }
+
+      console.log(data);
+      dispatch({ type: "SET_CURRUSER", payload: data.user });
     }
 
     toast.success(

@@ -14,6 +14,7 @@ const intialChatState = {
   rooms: [],
   newMessage: null,
   conversations: {},
+  currUser: null,
 };
 
 export const ChatContext = createContext();
@@ -24,6 +25,11 @@ export const useChat = () => {
 
 const chatReducer = (state, action) => {
   switch (action.type) {
+    case "SET_CURRUSER":
+      return {
+        ...state,
+        currUser: action.payload,
+      };
     case "UPDATE_SELECTED_ROOM":
       return {
         ...state,
@@ -40,6 +46,12 @@ const chatReducer = (state, action) => {
       return {
         ...state,
         rooms: action.payload,
+      };
+
+    case "UPDATE_ROOMS":
+      return {
+        ...state,
+        rooms: [...state.rooms, action.payload],
       };
 
     case "INIT_CONVO":
@@ -66,7 +78,6 @@ const ChatContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(chatReducer, intialChatState);
 
   const mountedRef = useRef(true);
-  const { user, error } = useUser();
 
   const addNewMessageToConversation = async (newMessage) => {
     console.log("addNewMessageToConversation called");
@@ -82,6 +93,11 @@ const ChatContextProvider = ({ children }) => {
       dispatch({ type: "UPDATE_CONVO", payload: data });
     }
   };
+
+  const addNewRoom = (newRoom) => {
+    console.log(newRoom);
+    dispatch({ type: "UPDATE_ROOMS", payload: newRoom });
+  };
   // Get all rooms from supabase
   useEffect(() => {
     let roomSubscriptions = [];
@@ -91,7 +107,7 @@ const ChatContextProvider = ({ children }) => {
       const { data, error } = await supabaseClient
         .from("rooms")
         .select("*, room_participants!inner(*)")
-        .eq("room_participants.profile_id", user?.id)
+        .eq("room_participants.profile_id", state.currUser.id)
         .order("created_at", { ascending: false });
 
       // if (error) alert(error);
@@ -131,7 +147,7 @@ const ChatContextProvider = ({ children }) => {
             .subscribe();
           console.log(
             "🚀 ~ file: ChatContext.js ~ line 68 ~ data.forEach ~ subscription",
-            subscription
+            subscription.state
           );
 
           roomSubscriptions.push(subscription);
@@ -139,16 +155,16 @@ const ChatContextProvider = ({ children }) => {
 
         newRoomAddListener = supabaseClient
           .from("rooms")
-          .on("INSERT", (payload) => console.log(payload.new))
+          .on("INSERT", (payload) => addNewRoom(payload.new))
           .subscribe();
         console.log(
-          "🚀 ~ file: ChatContext.js ~ line 145 ~ getRooms ~ newRoomAddListener",
-          newRoomAddListener
+          "🚀 ~ file: ChatContext.js ~ line 153 ~ getRooms ~ newRoomAddListener",
+          newRoomAddListener.state
         );
       }
     };
 
-    if (mountedRef.current && user) {
+    if (state.currUser !== null && mountedRef.current) {
       console.log("Calling getRooms()");
       getRooms();
       mountedRef.current = false;
@@ -167,7 +183,7 @@ const ChatContextProvider = ({ children }) => {
 
       mountedRef.current = true;
     };
-  }, [user]);
+  }, [state.currUser]);
 
   return (
     <ChatContext.Provider
