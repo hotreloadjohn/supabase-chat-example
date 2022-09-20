@@ -109,7 +109,8 @@ export const getServerSideProps = async ({ params }) => {
         profiles (username)
       `
     )
-    .eq("id", productId[0]);
+    .eq("id", productId[0])
+    .single();
 
   if (error) {
     return toast.error(error.message);
@@ -117,7 +118,7 @@ export const getServerSideProps = async ({ params }) => {
 
   return {
     props: {
-      data: data[0],
+      data,
     },
   };
 };

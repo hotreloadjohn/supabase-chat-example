@@ -41,9 +41,8 @@ const User = ({ room }) => {
     <div
       onClick={handleClick}
       className={`cursor-pointer h-[74px] overflow-hidden whitespace-normal text-ellipsis rounded-1 text-[15px] text-[#7a7f9a] leading-[22.5px] py-4 px-5 mb-0.5 flex justify-between gap-3 transition-colors duration-300 hover:bg-[#e6ebf5] dark:hover:bg-[#36404a] tablet:hover:bg-inherit tablet:dark:hover:bg-inherit ${
-        window.innerWidth > 991 &&
-        state.selectedRoomId?.id === room.id &&
-        "bg-[#e6ebf5] dark:bg-[#36404a]"
+        // window.innerWidth > 991 &&
+        state.selectedRoomId?.id === room.id && "bg-[#e6ebf5] dark:bg-[#36404a]"
       } `}
     >
       <div

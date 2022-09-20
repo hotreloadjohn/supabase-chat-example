@@ -25,12 +25,13 @@ end;
 ```
 
 ```
+NOT NEEDED - replaced by RPC create_rooms
 on_room_created(trigger)
 
 insert_creator_into_room trigger
 
 begin
-  insert into room_participant(room_id, profile_id)
+  insert into room_participants(room_id, profile_id)
   values(new.id, auth.uid());
 
   return new;
@@ -74,6 +75,15 @@ returns rooms as $$
     return v_room;
   end;
 $$ language plpgsql security definer;
+
+```
+
+```
+Supabase image bucket: https://supabase.com/docs/guides/storage#allow-public-access-to-a-bucket
+
+add select and insert ->
+bucket_id = 'products'
+and auth.role() = 'authenticated
 
 ```
 
