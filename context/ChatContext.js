@@ -9,7 +9,7 @@ import {
 } from "react";
 
 const intialChatState = {
-  selectedRoomId: null,
+  selectedRoom: {},
   chatMessages: [],
   rooms: [],
   newMessage: null,
@@ -33,7 +33,7 @@ const chatReducer = (state, action) => {
     case "UPDATE_SELECTED_ROOM":
       return {
         ...state,
-        selectedRoomId: action.payload,
+        selectedRoom: action.payload,
       };
 
     case "UPDATE_MESSAGES":

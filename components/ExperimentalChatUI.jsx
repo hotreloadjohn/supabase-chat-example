@@ -12,7 +12,7 @@ const ExperimentalChatUI = () => {
 
   const { user } = useUser();
 
-  const scrollRef = useRef();
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     const createSellerList = async () => {
@@ -41,20 +41,25 @@ const ExperimentalChatUI = () => {
   }, [state.rooms]);
 
   useEffect(() => {
-    setselectedRoomMsgs(state.conversations[state.selectedRoomId]);
-  }, [state.selectedRoomId]);
+    setselectedRoomMsgs(
+      state.conversations[state.selectedRoom.selected_sellerId]
+    );
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [state.selectedRoom.selected_sellerId, state.conversations]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView();
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [selectedRoomMsgs]);
 
   const handleKeyDown = async (event) => {
     if (event.key === "Enter") {
       // 👇️ your logic here value.trim()
       console.log("Enter key pressed ✅");
-      const { error } = await supabaseClient
-        .from("messages")
-        .insert({ content: message.trim(), room_id: state.selectedRoomId });
+
+      const { error } = await supabaseClient.from("messages").insert({
+        content: message.trim(),
+        room_id: state.selectedRoom.selected_sellerId,
+      });
 
       if (error) {
         alert(error.message);
@@ -97,17 +102,24 @@ const ExperimentalChatUI = () => {
             <h2 className="my-2 mb-2 ml-2 text-lg text-gray-600">Chats</h2>
             <li>
               {sellers.map((seller) => {
+                console.log(seller);
                 return (
                   <a
                     key={seller.id}
                     onClick={() =>
                       dispatch({
                         type: "UPDATE_SELECTED_ROOM",
-                        payload: seller.id,
+                        payload: {
+                          selected_sellerId: seller.id,
+                          selected_sellerName: seller.seller_name,
+                          selected_sellerAvatar: seller.seller_avatar,
+                        },
                       })
                     }
                     className={`${
-                      seller.id === state.selectedRoomId ? "bg-gray-100" : ""
+                      seller.id === state.selectedRoom.selected_sellerId
+                        ? "bg-gray-100"
+                        : ""
                     } flex items-center px-3 py-2 text-sm 
                     transition duration-150 ease-in-out border-b 
                     border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none`}
@@ -155,16 +167,18 @@ const ExperimentalChatUI = () => {
             <div className="relative flex items-center p-3 border-b border-gray-300">
               <img
                 className="object-cover w-10 h-10 rounded-full"
-                src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg"
-                alt="username"
+                src={state.selectedRoom.selected_sellerAvatar}
+                alt="selected_conversation"
               />
-              <span className="block ml-2 font-bold text-gray-600">Emma</span>
+              <span className="block ml-2 font-bold text-gray-600">
+                {state.selectedRoom.selected_sellerName}
+              </span>
               <span className="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
             </div>
 
             <div
               ref={scrollRef}
-              className="relative w-full p-6 overflow-y-auto h-[calc(100vh-14rem)]"
+              className="w-full p-6 overflow-y-scroll h-[calc(100vh-14rem)]"
             >
               <ul className="space-y-2">
                 {selectedRoomMsgs?.map((msg) => {

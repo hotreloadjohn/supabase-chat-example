@@ -7,6 +7,7 @@ import AuthForm from "./AuthForm";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import ProfileDropdown from "./ProfileDropdown";
 import { AiOutlineMessage } from "react-icons/ai";
+import Image from "next/image";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,8 +27,15 @@ const Navbar = () => {
                 className="flex justify-center items-center flex-shrink-0"
               >
                 <h1 className="font-bold text-xl cursor-pointer">
-                  <span className="text-yellow-600">Iron</span>
-                  <span className="text-red-600">Man</span>
+                  {/* <span className="text-yellow-600">Iron</span>
+                  <span className="text-red-600">Man</span> */}
+                  <Image
+                    src="/images/logo.png"
+                    alt="logo"
+                    width="80rem"
+                    height="80rem"
+                    // objectFit="cover"
+                  />
                 </h1>
               </Link>
               {user ? (

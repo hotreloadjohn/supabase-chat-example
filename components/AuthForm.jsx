@@ -3,7 +3,6 @@ import useForm from "../hooks/useForm";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 import { useChat } from "../context/ChatContext";
-import axios from "axios";
 
 const AuthForm = ({ formType = "signup", closeModal }) => {
   const [loading, setLoading] = useState(false);

@@ -91,6 +91,10 @@ https://medium.com/carousell-insider/assembling-robust-web-chat-applications-wit
 
 https://ui-avatars.com/
 
+## Carousell Buyer-Seller Chat in 2020
+
+https://www.youtube.com/watch?v=-8XUzP0kUrY
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
