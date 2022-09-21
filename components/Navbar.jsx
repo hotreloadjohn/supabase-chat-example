@@ -15,8 +15,8 @@ const Navbar = () => {
   const [formType, setFormType] = useState("login");
 
   return (
-    <div>
-      <nav className="shadow-sm fixed w-full z-10 bg-gray-300">
+    <div className="sticky top-0 z-10">
+      <nav className="shadow-sm w-full bg-gray-300">
         <div className="w-full">
           <div className="flex items-center h-20 w-full">
             {/* first block */}

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import useForm from "../hooks/useForm";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";

@@ -12,7 +12,6 @@ const ChatContainer = () => {
   const [search, setSearch] = useState("");
 
   const user = false;
-  const chatUser = true;
   const messages = true;
   const connectionId = false;
   const show = true;
@@ -37,7 +36,7 @@ const ChatContainer = () => {
 
   return (
     <div className="flex-1">
-      {chatUser ? (
+      {state.selectedRoomId?.id ? (
         <div className="flex h-full flex-col relative">
           <Header searchMessage={searchMessage} />
 

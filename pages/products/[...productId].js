@@ -22,6 +22,11 @@ const ProductDetails = ({ data }) => {
   const images = [];
   const productImgs = [data.image_url];
   const seller = data.seller_id;
+  const product_details = data;
+  console.log(
+    "🚀 ~ file: [...productId].js ~ line 25 ~ ProductDetails ~ seller",
+    seller
+  );
   const item_name = data.name;
 
   productImgs.map((image, i) => {
@@ -39,6 +44,7 @@ const ProductDetails = ({ data }) => {
     const { data, error } = await supabaseClient
       .rpc("create_room", {
         name: item_name,
+        product_id: product_details.id,
         seller,
       })
       .single();

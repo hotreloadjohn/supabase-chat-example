@@ -60,12 +60,25 @@ const chatReducer = (state, action) => {
         conversations: action.payload,
       };
 
+    // case "ADD_CONVO":
+    //   return {
+    //     ...state,
+    //     conversations: { ...state.conversations, [action.payload.room_id]: [] },
+    //   };
+
     case "UPDATE_CONVO":
+      console.log("i am called (UPDATE_CONVO)");
       const updatedConvs = { ...state.conversations };
+      // Try find loaded conversations
       const convoRoom = updatedConvs[action.payload.room_id];
-      //Dunno what is react-devtool doing
-      const isAdded = convoRoom.find((msg) => msg.id === action.payload.id);
-      if (!isAdded) updatedConvs[action.payload.room_id].push(action.payload);
+      // new room = convoRoom undefined
+      if (convoRoom) {
+        //Dunno what is react-devtool doing
+        const isAdded = convoRoom.find((msg) => msg.id === action.payload.id);
+        if (!isAdded) updatedConvs[action.payload.room_id].push(action.payload);
+      } else {
+        updatedConvs[action.payload.room_id] = [action.payload];
+      }
 
       return {
         ...state,
@@ -76,6 +89,7 @@ const chatReducer = (state, action) => {
 
 const ChatContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(chatReducer, intialChatState);
+  const { user } = useUser();
 
   const mountedRef = useRef(true);
 
@@ -94,96 +108,174 @@ const ChatContextProvider = ({ children }) => {
     }
   };
 
-  const addNewRoom = (newRoom) => {
-    console.log(newRoom);
-    dispatch({ type: "UPDATE_ROOMS", payload: newRoom });
-  };
-  // Get all rooms from supabase
   useEffect(() => {
-    let roomSubscriptions = [];
-    const newRoomAddListener = null;
+    const initRoomsMessages = async (rooms) => {
+      // init messages in rooms
+      const convos = await Promise.all(
+        rooms.map(async (room) => {
+          const { data } = await supabaseClient
+            .from("messages")
+            .select("*, profile: profiles(id, username)")
+            .match({ room_id: room.id })
+            .order("created_at");
+          return { [room.id]: data };
+        })
+      );
+      console.log(
+        "🚀 ~ file: ChatContext.js ~ line 124 ~ initRoomsMessages ~ convos",
+        convos
+      );
 
-    const getRooms = async () => {
-      const { data, error } = await supabaseClient
-        .from("rooms")
-        .select("*, room_participants!inner(*)")
-        .eq("room_participants.profile_id", state.currUser.id)
-        .order("created_at", { ascending: false });
+      dispatch({
+        type: "INIT_CONVO",
+        payload: Object.assign({}, ...convos),
+      });
 
-      // if (error) alert(error);
-      if (data) {
-        dispatch({ type: "INIT_ROOMS", payload: data });
-        // dispatch({ type: "UPDATE_SELECTED_ROOM", payload: data[0].id });
-        console.log(`Init Rooms: ${data}`);
-
-        const convos = await Promise.all(
-          data.map(async (room) => {
-            const { data } = await supabaseClient
-              .from("messages")
-              .select("*, profile: profiles(id, username)")
-              .match({ room_id: room.id })
-              .order("created_at");
-            return { [room.id]: data };
+      // Mount Message Listener
+      // supabaseClient.removeAllSubscriptions(); //TODO: call when user signout
+      rooms.forEach((room) => {
+        supabaseClient
+          .from(`messages:room_id=eq.${room.id}`)
+          .on("INSERT", (payload) => {
+            // console.log(payload.new);
+            addNewMessageToConversation(payload.new);
+            // getUserProfile(payload.new);
           })
-        );
+          .subscribe();
+      });
+    };
 
-        dispatch({
-          type: "INIT_CONVO",
-          payload: Object.assign({}, ...convos),
-        });
-
-        // subscribe to all message-room listener
-        data.forEach((room) => {
-          console.log(`subscribing to ${room.name}`);
-          let subscription = supabaseClient
-            .from(`messages:room_id=eq.${room.id}`)
-            .on("INSERT", (payload) => {
-              // TODO: add new user to cache if their profile doesn't exist
-              // setThisMessages((current) => [...current, payload.new]);
-              console.log(payload.new);
-              addNewMessageToConversation(payload.new);
+    const initOnNewRoomCreated = async () => {
+      supabaseClient
+        .from("rooms")
+        .on("INSERT", (payload) => {
+          dispatch({ type: "UPDATE_ROOMS", payload: payload.new });
+          // Sub room-message listener
+          supabaseClient
+            .from(`messages:room_id=eq.${payload.new.id}`)
+            .on("INSERT", (msgPayload) => {
+              console.log(msgPayload.new);
+              addNewMessageToConversation(msgPayload.new);
               // getUserProfile(payload.new);
             })
             .subscribe();
-          console.log(
-            "🚀 ~ file: ChatContext.js ~ line 68 ~ data.forEach ~ subscription",
-            subscription.state
-          );
-
-          roomSubscriptions.push(subscription);
-        });
-
-        newRoomAddListener = supabaseClient
-          .from("rooms")
-          .on("INSERT", (payload) => addNewRoom(payload.new))
-          .subscribe();
-        console.log(
-          "🚀 ~ file: ChatContext.js ~ line 153 ~ getRooms ~ newRoomAddListener",
-          newRoomAddListener.state
-        );
-      }
+        })
+        .subscribe();
     };
 
-    if (state.currUser !== null && mountedRef.current) {
-      console.log("Calling getRooms()");
-      getRooms();
+    const initUserRooms = async () => {
+      const { data, error } = await supabaseClient
+        .from("rooms")
+        .select("*, room_participants!inner(*), products!inner(*)")
+        .eq("room_participants.profile_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) alert(error.message);
+      dispatch({ type: "INIT_ROOMS", payload: data });
+
+      initRoomsMessages(data);
+      // init new room listener
+      initOnNewRoomCreated();
+    };
+
+    if (mountedRef.current && user?.id) {
+      // init rooms and messages in rooms
+      initUserRooms();
+
       mountedRef.current = false;
     }
-
     return () => {
-      if (roomSubscriptions.length > 0) {
-        console.log("unsubscribing...");
-        roomSubscriptions.forEach((sub) =>
-          supabaseClient.removeSubscription(sub)
-        );
-      }
-
-      if (newRoomAddListener)
-        supabaseClient.removeSubscription(newRoomAddListener);
-
       mountedRef.current = true;
+      supabaseClient.removeAllSubscriptions();
     };
-  }, [state.currUser]);
+  }, [user?.id]);
+
+  // // Get all rooms from supabase
+  // useEffect(() => {
+  //   let roomSubscriptions = [];
+  //   const newRoomAddListener = null;
+
+  //   const getRooms = async () => {
+  //     const { data, error } = await supabaseClient
+  //       .from("rooms")
+  //       .select("*, room_participants!inner(*)")
+  //       .eq("room_participants.profile_id", state.currUser.id)
+  //       .order("created_at", { ascending: false });
+
+  //     // if (error) alert(error);
+  //     if (data) {
+  //       dispatch({ type: "INIT_ROOMS", payload: data });
+  //       // dispatch({ type: "UPDATE_SELECTED_ROOM", payload: data[0].id });
+  //       console.log(`Init Rooms: ${data}`);
+
+  //       const convos = await Promise.all(
+  //         data.map(async (room) => {
+  //           const { data } = await supabaseClient
+  //             .from("messages")
+  //             .select("*, profile: profiles(id, username)")
+  //             .match({ room_id: room.id })
+  //             .order("created_at");
+  //           return { [room.id]: data };
+  //         })
+  //       );
+
+  //       dispatch({
+  //         type: "INIT_CONVO",
+  //         payload: Object.assign({}, ...convos),
+  //       });
+
+  //       // subscribe to all message-room listener
+  //       data.forEach((room) => {
+  //         console.log(`subscribing to ${room.name}`);
+  //         let subscription = supabaseClient
+  //           .from(`messages:room_id=eq.${room.id}`)
+  //           .on("INSERT", (payload) => {
+  //             // TODO: add new user to cache if their profile doesn't exist
+  //             // setThisMessages((current) => [...current, payload.new]);
+  //             console.log(payload.new);
+  //             addNewMessageToConversation(payload.new);
+  //             // getUserProfile(payload.new);
+  //           })
+  //           .subscribe();
+  //         console.log(
+  //           "🚀 ~ file: ChatContext.js ~ line 68 ~ data.forEach ~ subscription",
+  //           subscription.state
+  //         );
+
+  //         roomSubscriptions.push(subscription);
+  //       });
+
+  //       newRoomAddListener = supabaseClient
+  //         .from("rooms")
+  //         .on("INSERT", (payload) => addNewRoom(payload.new))
+  //         .subscribe();
+  //       console.log(
+  //         "🚀 ~ file: ChatContext.js ~ line 153 ~ getRooms ~ newRoomAddListener",
+  //         newRoomAddListener.state
+  //       );
+  //     }
+  //   };
+
+  //   if (state.currUser !== null && mountedRef.current) {
+  //     console.log("Calling getRooms()");
+  //     getRooms();
+  //     mountedRef.current = false;
+  //   }
+
+  //   return () => {
+  //     if (roomSubscriptions.length > 0) {
+  //       console.log("unsubscribing...");
+  //       roomSubscriptions.forEach((sub) =>
+  //         supabaseClient.removeSubscription(sub)
+  //       );
+  //     }
+
+  //     if (newRoomAddListener)
+  //       supabaseClient.removeSubscription(newRoomAddListener);
+
+  //     mountedRef.current = true;
+  //   };
+  // }, [state.currUser]);
 
   return (
     <ChatContext.Provider
