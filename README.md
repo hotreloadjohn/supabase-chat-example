@@ -95,6 +95,10 @@ https://ui-avatars.com/
 
 https://www.youtube.com/watch?v=-8XUzP0kUrY
 
+## Tools to export schema & create ER diagram (Unoffical)
+
+https://github.com/zernonia/supabase-schema
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
