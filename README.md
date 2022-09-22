@@ -6,6 +6,22 @@ A simple chat app build using NextJS and Supabase.
 
 A "proof of concept" of private chat messaging (chat with seller) just like Carousell using NextJS + Supabase realtime database.
 
+## Features & TODO
+
+- [x] Basic Signup and Login
+- [x] Upload single image (post an item listing)
+- [x] View items (seller and own)
+- [x] Chat with seller only (frontend check only)
+- [ ] Protected routes
+- [ ] [Chat*] New message notifications
+- [ ] [Chat] Display chat user last sent messages
+- [ ] [Chat] Timestamp and username display to chats
+- [ ] [Chat] Emoji selector component
+- [ ] [Chat] Attach images
+- [ ] [Chat] User online/offline status
+- [ ] [Chat] Real-time "user is typing..." indicator
+- [ ] [Chat] MANY MORE...
+
 ## Installation
 
 ```sh
@@ -24,7 +40,7 @@ npm install
 
 1. Create Supabase account
 2. Dump schema.sql using Supabase Dashboard using SQL editor
-3. Setup functions and trigger (TO BE UPDATED with images)
+3. Setup functions and triggers (TO BE UPDATED with images)
 
 ```
 begin
