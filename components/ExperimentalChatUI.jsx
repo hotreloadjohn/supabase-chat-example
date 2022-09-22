@@ -94,9 +94,11 @@ const ExperimentalChatUI = ({ user }) => {
   }, [state.rooms, state.selectedRoom, user.id]);
 
   useEffect(() => {
-    setselectedRoomMsgs(
-      state.conversations[state.selectedRoom?.selected_chatUserId]
-    );
+    if (state.conversations) {
+      setselectedRoomMsgs(
+        state.conversations[state.selectedRoom?.selected_chatUserId]
+      );
+    }
 
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
