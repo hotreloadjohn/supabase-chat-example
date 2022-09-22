@@ -50,7 +50,7 @@ const Navbar = () => {
                     <ProfileDropdown />
                     <Link href="/inbox">
                       <a>
-                        <AiOutlineMessage size="1.4rem" />
+                        <AiOutlineMessage size="1.4rem" color="white" />
                       </a>
                     </Link>
 
