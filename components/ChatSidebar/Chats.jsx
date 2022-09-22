@@ -18,7 +18,7 @@ const Chats = () => {
           const { data } = await supabaseClient
             .from("profiles")
             .select("*")
-            .match({ id: room.created_by })
+            .match({ id: room.buyer_id })
             .single();
           return {
             id: room.id,

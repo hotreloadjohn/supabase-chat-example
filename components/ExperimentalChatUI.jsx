@@ -16,12 +16,13 @@ const ExperimentalChatUI = () => {
 
   useEffect(() => {
     const createSellerList = async () => {
+      console.log("Exp chatUI", state.rooms);
       const sellerTemp = await Promise.all(
         state.rooms.map(async (room) => {
           const { data } = await supabaseClient
             .from("profiles")
             .select("*")
-            .match({ id: room.products.seller_id })
+            .match({ id: room.products?.seller_id })
             .single();
           return {
             id: room.id,
@@ -36,6 +37,7 @@ const ExperimentalChatUI = () => {
     };
 
     if (state.rooms) {
+      console.log(state.rooms);
       createSellerList();
     }
   }, [state.rooms]);
@@ -102,7 +104,6 @@ const ExperimentalChatUI = () => {
             <h2 className="my-2 mb-2 ml-2 text-lg text-gray-600">Chats</h2>
             <li>
               {sellers.map((seller) => {
-                console.log(seller);
                 return (
                   <a
                     key={seller.id}

@@ -108,6 +108,17 @@ const ChatContextProvider = ({ children }) => {
     }
   };
 
+  const checkRoomParticipants = async (room) => {
+    const { data, error } = await supabaseClient.rpc("is_room_participant", {
+      room_id: room.id,
+      profile_id: user.id,
+    });
+
+    if (error) alert(error.message);
+
+    return data;
+  };
+
   useEffect(() => {
     const initRoomsMessages = async (rooms) => {
       // init messages in rooms
@@ -148,17 +159,28 @@ const ChatContextProvider = ({ children }) => {
     const initOnNewRoomCreated = async () => {
       supabaseClient
         .from("rooms")
-        .on("INSERT", (payload) => {
-          dispatch({ type: "UPDATE_ROOMS", payload: payload.new });
-          // Sub room-message listener
-          supabaseClient
-            .from(`messages:room_id=eq.${payload.new.id}`)
-            .on("INSERT", (msgPayload) => {
-              console.log(msgPayload.new);
-              addNewMessageToConversation(msgPayload.new);
-              // getUserProfile(payload.new);
-            })
-            .subscribe();
+        .on("INSERT", async (payload) => {
+          // check if room created intended for user
+          const doUpdateRooms = await checkRoomParticipants(payload.new);
+
+          if (doUpdateRooms) {
+            const { data, error } = await supabaseClient
+              .from("rooms")
+              .select("*, products!inner(*)")
+              .eq("id", payload.new.id)
+              .single();
+
+            dispatch({ type: "UPDATE_ROOMS", payload: data });
+            // Sub room-message listener
+            supabaseClient
+              .from(`messages:room_id=eq.${payload.new.id}`)
+              .on("INSERT", (msgPayload) => {
+                console.log(msgPayload.new);
+                addNewMessageToConversation(msgPayload.new);
+                // getUserProfile(payload.new);
+              })
+              .subscribe();
+          }
         })
         .subscribe();
     };
