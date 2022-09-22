@@ -13,7 +13,7 @@ const intialChatState = {
   chatMessages: [],
   rooms: [],
   newMessage: null,
-  conversations: {},
+  conversations: null,
   currUser: null,
 };
 
@@ -83,6 +83,11 @@ const chatReducer = (state, action) => {
       return {
         ...state,
         conversations: updatedConvs,
+      };
+
+    case "RESET_STATE":
+      return {
+        state: intialChatState,
       };
   }
 };

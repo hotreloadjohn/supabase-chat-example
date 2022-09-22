@@ -4,15 +4,13 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 
-const ExperimentalChatUI = () => {
+const ExperimentalChatUI = ({ user }) => {
   const [search, setSearch] = useState("");
   const { state, dispatch } = useChat();
   const [sellers, setSellers] = useState([]); // You are buying
   const [buyers, setBuyers] = useState([]); // You are selling
   const [selectedRoomMsgs, setselectedRoomMsgs] = useState();
   const [message, setMessage] = useState("");
-
-  const { user } = useUser();
 
   const scrollRef = useRef(null);
 
@@ -44,6 +42,7 @@ const ExperimentalChatUI = () => {
   // }, [state.rooms]);
 
   useEffect(() => {
+    console.log(state.selectedRoom);
     const createBuyerSellerList = async () => {
       console.log("Exp chatUI", state.rooms);
       const sellerListTemp = await Promise.all(
@@ -92,7 +91,7 @@ const ExperimentalChatUI = () => {
     if (state.rooms) {
       createBuyerSellerList();
     }
-  }, [state.rooms]);
+  }, [state.rooms, state.selectedRoom, user.id]);
 
   useEffect(() => {
     setselectedRoomMsgs(

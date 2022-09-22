@@ -8,12 +8,18 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import ProfileDropdown from "./ProfileDropdown";
 import { AiOutlineMessage } from "react-icons/ai";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+import { useChat } from "../context/ChatContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, error } = useUser();
   const [openModal, setOpenModal] = useState(false);
   const [formType, setFormType] = useState("login");
+  const { dispatch } = useChat();
+
+  const router = useRouter();
 
   return (
     <div className="sticky top-0 z-10">
@@ -62,7 +68,13 @@ const Navbar = () => {
 
                     <button
                       className="px-4 py-2 text-md text-white bg-black border border-black rounded hover:text-black hover:bg-white"
-                      onClick={() => supabaseClient.auth.signOut()}
+                      onClick={async () => {
+                        const { error } = await supabaseClient.auth.signOut();
+                        if (error) toast.error(error.msg);
+                        dispatch({ type: "RESET_STATE" });
+                        toast.success("Successfully logout!");
+                        router.replace("/"); //redirect user back to /
+                      }}
                     >
                       Sign out
                     </button>
