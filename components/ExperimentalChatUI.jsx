@@ -54,10 +54,7 @@ const ExperimentalChatUI = () => {
               .select("*")
               .match({ id: room.products.seller_id })
               .single();
-            console.log(
-              "🚀 ~ file: ExperimentalChatUI.jsx ~ line 55 ~ .map ~ data",
-              data
-            );
+
             return {
               id: room.id,
               seller_name: data.username,
@@ -131,6 +128,10 @@ const ExperimentalChatUI = () => {
     }
   };
 
+  const handleSearchChange = (e) => {
+    console.log(e.key);
+  };
+
   return (
     <div className="flex grow">
       <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
@@ -155,7 +156,9 @@ const ExperimentalChatUI = () => {
                 className="block w-full py-2 pl-10 bg-gray-100 rounded outline-none"
                 name="search"
                 placeholder="Search"
-                required
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                // onKeyDown={handleSearchChange}
               />
             </div>
           </div>
@@ -163,64 +166,69 @@ const ExperimentalChatUI = () => {
           <ul className="overflow-auto h-[calc(100vh-10rem)]">
             <h2 className="my-2 mb-2 ml-2 text-lg text-gray-600">Chats</h2>
             <li>
-              {[...sellers, ...buyers].map((chatUser) => {
-                console.log(`chatUser ${JSON.stringify(chatUser)}`);
-                return (
-                  <a
-                    key={chatUser.id}
-                    onClick={() =>
-                      dispatch({
-                        type: "UPDATE_SELECTED_ROOM",
-                        payload: {
-                          selected_chatUserId: chatUser.id,
-                          selected_chatUserName: chatUser.seller_name,
-                          selected_chatUserAvatar: chatUser.seller_avatar,
-                        },
-                      })
-                    }
-                    className={`${
-                      chatUser.id === state.selectedRoom?.selected_chatUserId
-                        ? "bg-gray-100"
-                        : ""
-                    } flex items-center px-3 py-2 text-sm 
+              {[...sellers, ...buyers]
+                .filter((chatUser) =>
+                  chatUser.seller_name
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                )
+                .map((chatUser) => {
+                  return (
+                    <a
+                      key={chatUser.id}
+                      onClick={() =>
+                        dispatch({
+                          type: "UPDATE_SELECTED_ROOM",
+                          payload: {
+                            selected_chatUserId: chatUser.id,
+                            selected_chatUserName: chatUser.seller_name,
+                            selected_chatUserAvatar: chatUser.seller_avatar,
+                          },
+                        })
+                      }
+                      className={`${
+                        chatUser.id === state.selectedRoom?.selected_chatUserId
+                          ? "bg-gray-100"
+                          : ""
+                      } flex items-center px-3 py-2 text-sm 
                     transition duration-150 ease-in-out border-b 
                     border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none`}
-                  >
-                    <img
-                      className="object-cover w-10 h-10 rounded-full"
-                      src={chatUser.seller_avatar}
-                      alt="username"
-                    />
-                    <div className="w-full pb-2">
-                      <div className="flex justify-between">
-                        <span className="block ml-2 font-semibold text-gray-600">
-                          {chatUser.seller_name}
-                        </span>
-                        <span className="block ml-2 text-sm text-gray-600">
-                          25 minutes
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        {/* item name and last message */}
-                        <div>
-                          <span className="block ml-2 font-bold text-gray-600">
-                            {chatUser.item_name}
+                    >
+                      <img
+                        className="object-cover w-10 h-10 rounded-full"
+                        src={chatUser.seller_avatar}
+                        alt="username"
+                      />
+                      <div className="w-full pb-2">
+                        <div className="flex justify-between">
+                          <span className="block ml-2 font-semibold text-gray-600">
+                            {chatUser.seller_name}
                           </span>
                           <span className="block ml-2 text-sm text-gray-600">
-                            Last message sent by user
+                            25 minutes
                           </span>
                         </div>
-                        {/* item image */}
-                        <img
-                          className="object-cover w-10 h-10 rounded-lg"
-                          src={chatUser.item_avatar}
-                          alt="item-url"
-                        />
+                        <div className="flex justify-between">
+                          {/* item name and last message */}
+                          <div>
+                            <span className="block ml-2 font-bold text-gray-600">
+                              {chatUser.item_name}
+                            </span>
+                            <span className="block ml-2 text-sm text-gray-600">
+                              Last message sent by user
+                            </span>
+                          </div>
+                          {/* item image */}
+                          <img
+                            className="object-cover w-10 h-10 rounded-lg"
+                            src={chatUser.item_avatar}
+                            alt="item-url"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </a>
-                );
-              })}
+                    </a>
+                  );
+                })}
             </li>
           </ul>
         </div>

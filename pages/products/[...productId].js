@@ -9,25 +9,22 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { useRouter } from "next/router";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useState, useEffect } from "react";
 
 // https://www.youtube.com/watch?v=sFYEpseLriU
 // https://github.com/iskurbanov/shopify-next.js-tailwind/blob/main/components/ProductPageContent.js
 
 const ProductDetails = ({ data }) => {
-  console.log(
-    "🚀 ~ file: [...productId].js ~ line 17 ~ ProductDetails ~ data",
-    data
-  );
   const router = useRouter();
   const images = [];
   const productImgs = [data.image_url];
   const seller = data.seller_id;
   const product_details = data;
-  console.log(
-    "🚀 ~ file: [...productId].js ~ line 25 ~ ProductDetails ~ seller",
-    seller
-  );
   const item_name = data.name;
+
+  const [isChatCreated, setIsChatCreated] = useState(false);
+  const { user, error } = useUser();
 
   productImgs.map((image, i) => {
     images.push(
@@ -41,6 +38,12 @@ const ProductDetails = ({ data }) => {
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
+    if (isChatCreated) {
+      alert(
+        "You are already in a conversation with this seller regarding this item"
+      );
+      return;
+    }
     const { data, error } = await supabaseClient
       .rpc("create_room", {
         name: item_name,
@@ -54,12 +57,37 @@ const ProductDetails = ({ data }) => {
       return;
     }
 
+    console.log("create_room", data);
+
     if (data) {
       router.push("/inbox");
     }
-
-    router.push("/inbox");
   };
+
+  useEffect(() => {
+    const checkIfChatCreated = async () => {
+      const { data, error, count } = await supabaseClient
+        .from("rooms")
+        .select("*", { count: "exact", head: true })
+        .match({ product_id: product_details.id, buyer_id: user.id });
+
+      if (error) alert(error.message);
+      console.log(count);
+      if (count === 1) {
+        setIsChatCreated(true);
+      } else {
+        setIsChatCreated(false);
+      }
+    };
+
+    if (user?.id) {
+      checkIfChatCreated();
+    }
+
+    return () => {
+      setIsChatCreated(false);
+    };
+  }, [user?.id]);
 
   return (
     <Layout>
@@ -90,8 +118,15 @@ const ProductDetails = ({ data }) => {
             <span className="pb-3">{data.description}</span>
             {/* chat form */}
             <form className="flex flex-col" onSubmit={handleCreateChat}>
-              <textarea className="border p-2" rows="5"></textarea>
-              <button className="bg-black rounded-lg text-white px-2 py-3 mt-3 hover:bg-gray-800">
+              {/* <textarea className="border p-2" rows="5"></textarea> */}
+              <button
+                disabled={isChatCreated}
+                className={`${
+                  isChatCreated
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-black hover:bg-gray-800"
+                } rounded-lg text-white px-2 py-3 mt-3 `}
+              >
                 Chat with {data.profiles.username}
               </button>
             </form>

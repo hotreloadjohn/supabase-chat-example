@@ -165,6 +165,10 @@ const ChatContextProvider = ({ children }) => {
               .select("*, products!inner(*)")
               .eq("id", payload.new.id)
               .single();
+            console.log(
+              "🚀 ~ file: ChatContext.js ~ line 168 ~ .on ~ initOnNewRoomCreated",
+              data
+            );
 
             dispatch({ type: "UPDATE_ROOMS", payload: data });
             // Sub room-message listener
