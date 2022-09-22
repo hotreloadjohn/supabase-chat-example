@@ -31,6 +31,7 @@ npm install
 ## Usage example
 
 - Sign up
+- Login
 - Click "Sell" to sell an item
 - Go to homepage (Click logo)
 - Click any item to view items detail page
@@ -99,13 +100,9 @@ and auth.role() = 'authenticated
 - 0.0.1
   - Work in progress
 
-## Meta
+## License
 
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
-
-Distributed under the XYZ license. See `LICENSE` for more information.
-
-[https://github.com/yourname/github-link](https://github.com/dbader/)
+See `LICENSE` for more information.
 
 ## Contributing
 
