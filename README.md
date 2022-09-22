@@ -12,7 +12,7 @@ A "proof of concept" of private chat messaging (chat with seller) just like Caro
 - [x] Upload single image (post an item listing)
 - [x] View items (seller and own)
 - [x] Chat with seller only (frontend check only)
-- [ ] Protected routes
+- [x] Protected routes
 - [ ] [Chat*] New message notifications
 - [ ] [Chat] Display chat user last sent messages
 - [ ] [Chat] Timestamp and username display to chats
