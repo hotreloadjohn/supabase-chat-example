@@ -17,7 +17,7 @@ const Navbar = () => {
 
   return (
     <div className="sticky top-0 z-10">
-      <nav className="shadow-sm w-full bg-gray-300">
+      <nav className="shadow-sm w-full bg-black">
         <div className="w-full">
           <div className="flex items-center h-20 w-full">
             {/* first block */}
@@ -32,8 +32,8 @@ const Navbar = () => {
                   <Image
                     src="/images/logo.png"
                     alt="logo"
-                    width="80rem"
-                    height="80rem"
+                    width="160rem"
+                    height="60rem"
                     // objectFit="cover"
                   />
                 </h1>

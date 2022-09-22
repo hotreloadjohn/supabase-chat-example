@@ -57,8 +57,6 @@ const ProductDetails = ({ data }) => {
       return;
     }
 
-    console.log("create_room", data);
-
     if (data) {
       router.push("/inbox");
     }
