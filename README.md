@@ -14,15 +14,25 @@ create table profiles (
 alter table profiles enable row level security;
 ```
 
-## Function
+## Function/Trigger
+
+handle_new_user
 
 ```
 begin
-  insert into public.profiles (id, username)
-  values (new.id, new.raw_user_meta_data ->> 'username');
+  insert into public.profiles (id, username, avatar_url)
+  values (new.id,
+  new.raw_user_meta_data ->> 'username',
+  new.raw_user_meta_data ->> 'avatar_url'
+  );
   return new;
 end;
+
 ```
+
+## Trigger
+
+on_user_create -> handle_new_user
 
 ```
 NOT NEEDED - replaced by RPC create_rooms
@@ -40,6 +50,7 @@ end
 ---
 
 is_room_participant -> bool
+Add args -> room_id, profile_id
 
 select exists (
   select 1
@@ -81,7 +92,7 @@ $$ language plpgsql security definer;
 ```
 Supabase image bucket: https://supabase.com/docs/guides/storage#allow-public-access-to-a-bucket
 
-add select and insert ->
+add select and insert (with sep line)->
 bucket_id = 'products'
 and auth.role() = 'authenticated
 

@@ -6,6 +6,7 @@ const nextConfig = {
     domains: [
       "yxopncyruetrkxwpnxkp.supabase.co",
       "rpovvaebkdbcsxjchvjg.supabase.co",
+      "ryayqmrpubcflfbzyaok.supabase.co",
       "bit.ly",
     ],
   },

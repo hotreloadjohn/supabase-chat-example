@@ -37,7 +37,8 @@ create table
 
 create table
     room_participants (
-        room_id uuid references rooms (id) primary key,
+        room_id uuid references rooms (id),
         created_at timestamp default now() not null,
-        profile_id uuid references profiles (id) primary key
+        profile_id uuid references profiles (id),
+        PRIMARY KEY(room_id, profile_id)
     );
