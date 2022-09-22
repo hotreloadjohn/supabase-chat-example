@@ -2,9 +2,8 @@
 
 # NextJS + Supabase Chat App Demo
 
-A simple chat app build using NextJS and Supabase.
-
-A "proof of concept" of private chat messaging (chat with seller) just like Carousell using NextJS + Supabase realtime database.
+A simple chat messaging app demo used in C2C marketplace/ecommerce web application (eg. Carousell).
+A "proof of concept" of private chat messaging built using NextJS + Supabase realtime database.
 
 ## Features & TODO
 
