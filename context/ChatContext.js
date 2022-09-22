@@ -9,7 +9,7 @@ import {
 } from "react";
 
 const intialChatState = {
-  selectedRoom: {},
+  selectedRoom: null,
   chatMessages: [],
   rooms: [],
   newMessage: null,
@@ -51,7 +51,7 @@ const chatReducer = (state, action) => {
     case "UPDATE_ROOMS":
       return {
         ...state,
-        rooms: [...state.rooms, action.payload],
+        rooms: [action.payload, ...state.rooms],
       };
 
     case "INIT_CONVO":
@@ -131,10 +131,6 @@ const ChatContextProvider = ({ children }) => {
             .order("created_at");
           return { [room.id]: data };
         })
-      );
-      console.log(
-        "🚀 ~ file: ChatContext.js ~ line 124 ~ initRoomsMessages ~ convos",
-        convos
       );
 
       dispatch({
