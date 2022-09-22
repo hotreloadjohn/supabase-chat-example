@@ -7,6 +7,7 @@ const nextConfig = {
       "yxopncyruetrkxwpnxkp.supabase.co",
       "rpovvaebkdbcsxjchvjg.supabase.co",
       "ryayqmrpubcflfbzyaok.supabase.co",
+      "ui-avatars.com",
       "bit.ly",
     ],
   },

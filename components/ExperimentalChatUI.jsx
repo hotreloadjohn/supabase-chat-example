@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useChat } from "../context/ChatContext";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
+import Image from "next/image";
 
 const ExperimentalChatUI = () => {
   const [search, setSearch] = useState("");
@@ -142,9 +143,9 @@ const ExperimentalChatUI = () => {
                 <svg
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   viewBox="0 0 24 24"
                   className="w-6 h-6 text-gray-300"
                 >
@@ -194,10 +195,13 @@ const ExperimentalChatUI = () => {
                     transition duration-150 ease-in-out border-b 
                     border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none`}
                     >
-                      <img
+                      <Image
                         className="object-cover w-10 h-10 rounded-full"
                         src={chatUser.seller_avatar}
                         alt="username"
+                        height="40"
+                        width="40"
+                        objectFit="cover"
                       />
                       <div className="w-full pb-2">
                         <div className="flex justify-between">
@@ -219,10 +223,12 @@ const ExperimentalChatUI = () => {
                             </span>
                           </div>
                           {/* item image */}
-                          <img
+                          <Image
                             className="object-cover w-10 h-10 rounded-lg"
                             src={chatUser.item_avatar}
                             alt="item-url"
+                            height="40"
+                            width="40"
                           />
                         </div>
                       </div>
@@ -237,10 +243,12 @@ const ExperimentalChatUI = () => {
           <div className="hidden lg:col-span-2 lg:block">
             <div className="w-full">
               <div className="relative flex items-center p-3 border-b border-gray-300">
-                <img
+                <Image
                   className="object-cover w-10 h-10 rounded-full"
                   src={state.selectedRoom.selected_chatUserAvatar}
                   alt="selected_conversation"
+                  height="40"
+                  width="40"
                 />
                 <span className="block ml-2 font-bold text-gray-600">
                   {state.selectedRoom.selected_chatUserName}
@@ -256,7 +264,7 @@ const ExperimentalChatUI = () => {
                   {selectedRoomMsgs?.map((msg) => {
                     if (msg.profile_id === user.id) {
                       return (
-                        <li className="flex justify-end ">
+                        <li key={msg.id} className="flex justify-end ">
                           <div className="bg-[#395dff] relative max-w-xl px-4 py-2 text-white rounded-tl-full rounded-tr-full rounded-bl-full shadow-xl">
                             <span className="block">{msg.content}</span>
                           </div>
@@ -264,7 +272,7 @@ const ExperimentalChatUI = () => {
                       );
                     } else {
                       return (
-                        <li className="flex justify-start">
+                        <li key={msg.id} className="flex justify-start">
                           <div className="relative max-w-xl px-4 py-2 text-black rounded-tl-full rounded-tr-full rounded-br-full shadow-xl">
                             <span className="block">{msg.content}</span>
                           </div>
