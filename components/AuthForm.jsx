@@ -32,7 +32,7 @@ const AuthForm = ({ formType = "signup", closeModal }) => {
         {
           data: {
             username: form.name,
-            avatar_url: `https://ui-avatars.com/api/?name=${form.name}`,
+            avatar_url: `https://ui-avatars.com/api/?name=${form.name}?format=png`,
           },
         }
       );
