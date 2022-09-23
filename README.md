@@ -36,6 +36,14 @@ npm install
 - Click any item to view items detail page
 - Click "Chat with xxx" to initial a conversation with seller.
 
+  ![](assets/20220923_124947_signup.gif)
+
+  ![](assets/20220923_125018_signin.gif)
+
+  ![](assets/20220923_125037_chat.gif)
+
+  ![](assets/20220923_125059_sell.gif)
+
 ## Development setup
 
 1. Create Supabase account
