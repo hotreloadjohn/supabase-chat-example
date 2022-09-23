@@ -36,13 +36,13 @@ npm install
 - Click any item to view items detail page
 - Click "Chat with xxx" to initial a conversation with seller.
 
-  ![](assets/20220923_124947_signup.gif)
+  ![](assets/images/20220923_124947_signup.gif)
 
-  ![](assets/20220923_125018_signin.gif)
+  ![](assets/images/20220923_125018_signin.gif)
 
-  ![](assets/20220923_125037_chat.gif)
+  ![](assets/images/20220923_125037_chat.gif)
 
-  ![](assets/20220923_125059_sell.gif)
+  ![](assets/images/20220923_125059_sell.gif)
 
 ## Development setup
 
@@ -111,12 +111,7 @@ and auth.role() = 'authenticated
 
 See `LICENSE` for more information.
 
-## Contributing
+## References
 
-1. Fork it ([https://github.com/yourname/yourproject/fork](https://github.com/yourname/yourproject/fork))
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-<!-- Markdown link & img dfn's -->
+1. [Multi-platform apps: Realtime chat app with Next.js - Supabase Happy Hour #2](https://www.youtube.com/watch?v=P9X_qVt10DY "Multi-platform apps: Realtime chat app with Next.js - Supabase Happy Hour #2")](https://www.youtube.com/watch?v=P9X_qVt10DY)
+2. [Building an Image Gallery with Next.js, Supabase, and Tailwind CSS](https://www.youtube.com/watch?v=BSoRXk1FIw8)
